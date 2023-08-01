@@ -1,0 +1,107 @@
+/*Future<void> addToFavorite() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+    CollectionReference favoriteCollection =
+        FirebaseFirestore.instance.collection('customer');
+
+    DocumentSnapshot snapshot = await widget.dog.get();
+    Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+    // Check if the dog is already in the favorite list
+    bool isFavoriteDog = await favoriteCollection
+        .doc(currentUser!.email)
+        .collection('favorite dog')
+        .where('รหัสประจำตัวสุนัข', isEqualTo: data?['รหัสประจำตัวสุนัข'])
+        .limit(1)
+        .get()
+        .then((snapshot) => snapshot.docs.isNotEmpty);
+
+    if (!isFavoriteDog) {
+      // Add the dog to the favorite list
+      return favoriteCollection
+          .doc(currentUser!.email)
+          .collection('favorite dog')
+          .doc()
+          .set({
+        'ชื่อสุนัข': data?['ชื่อสุนัข'],
+        'รหัสประจำตัวสุนัข': data?['รหัสประจำตัวสุนัข'],
+        'ราคาสุนัข': data?['ราคาสุนัข']
+      }).then((value) {
+        setState(() {
+          isFavorite = true;
+        });
+        print('Added to favorite');
+      });
+    } else {
+      // Remove the dog from the favorite list
+      return favoriteCollection
+          .doc(currentUser!.email)
+          .collection('favorite dog')
+          .where('รหัสประจำตัวสุนัข', isEqualTo: data?['รหัสประจำตัวสุนัข'])
+          .limit(1)
+          .get()
+          .then((snapshot) {
+        String docId = snapshot.docs.first.id;
+        return favoriteCollection
+            .doc(currentUser!.email)
+            .collection('favorite dog')
+            .doc(docId)
+            .delete()
+            .then((value) {
+          setState(() {
+            isFavorite = false;
+          });
+          print('Removed from favorite');
+        });
+      });
+    }
+  }*/
+   Future<void> addToFavorite() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    var currentUser = _auth.currentUser;
+    CollectionReference favoriteCollection =
+        FirebaseFirestore.instance.collection('customer');
+
+    DocumentSnapshot snapshot = await widget.dog.get();
+    Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+    // Check if the dog is already in the favorite list
+    QuerySnapshot querySnapshot = await favoriteCollection
+        .doc(currentUser!.email)
+        .collection('favorite dog')
+        .where('รหัสประจำตัวสุนัข', isEqualTo: data?['รหัสประจำตัวสุนัข'])
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      // Add the dog to the favorite list
+      return favoriteCollection
+          .doc(currentUser.email)
+          .collection('favorite dog')
+          .doc(data?['รหัสประจำตัวสุนัข']) // กำหนด Document ID เป็นรหัสสุนัข
+          .set(
+              data!) // ใช้ .set(data) เพื่อเพิ่มเอกสารในคอลเลกชัน 'favorite dog' ด้วย Document ID ที่กำหนด
+          .then((value) {
+        setState(() {
+          isFavorite = true;
+        });
+        print('Added to favorite');
+      });
+    } else {
+      // Remove the dog from the favorite list
+      String docId = querySnapshot.docs.first.id;
+      return favoriteCollection
+          .doc(currentUser.email)
+          .collection('favorite dog')
+          .doc(docId)
+          .delete()
+          .then((value) {
+        setState(() {
+          isFavorite = false;
+        });
+        print('Removed from favorite');
+      });
+    }
+  }
+
+// ฟังก์ชันตรวจสอบสถานะและเรียกใช้ฟังก์ชันเพิ่มหรือลบสุนัขจากรายการโปรด
