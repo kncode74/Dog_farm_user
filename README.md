@@ -1,16 +1,7 @@
 # petkub2
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+website
+![image](https://github.com/kncode74/Dog_farm_user/assets/69451462/daa48c0e-b69a-48b4-afac-4ac505e58dc7)
+![image](https://github.com/kncode74/Dog_farm_user/assets/69451462/7fb65458-6ded-4359-a5f5-f25713011773)
+Mobile App
+![image](https://github.com/kncode74/Dog_farm_user/assets/69451462/d30bced9-4ae2-4d24-b299-8cafa1c8bb79)
+![image](https://github.com/kncode74/Dog_farm_user/assets/69451462/e5e3a3fa-df31-48e2-b8ed-8ec2c24edffb)
