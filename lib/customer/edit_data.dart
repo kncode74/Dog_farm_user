@@ -88,6 +88,17 @@ class _EditDataCustomerState extends State<EditDataCustomer> {
     }
   }
 
+  List<String> age = [
+    'ต่ำกว่า 18 ปี',
+    '18 - 20 ปี',
+    '21 - 25 ปี',
+    '26 - 30 ปี',
+    '31 - 35 ปี',
+    '36 - 40 ปี',
+    '40 - 45 ปี',
+    '46 - 50 ปี',
+    'มากกว่า 50 ปี '
+  ];
   List<String> job = [
     'อาชีพอิสระ',
     'อาชีพรับจ้าง',
@@ -95,6 +106,7 @@ class _EditDataCustomerState extends State<EditDataCustomer> {
     'พนักงานออฟฟิศ',
     'เจ้าของธุรกิจ/ค้าขาย',
     'Infurencer',
+    'นักเรียน/นักศึกษา'
   ];
   List<String> income = [
     'ตำ่กว่า 10 000 บาท',
@@ -102,7 +114,7 @@ class _EditDataCustomerState extends State<EditDataCustomer> {
     '20 000-30 000',
     'มากกว่า 30 000 บาท'
   ];
-  List<String> sex = ['ชาย', 'หญิง'];
+  List<String> sex = ['ชาย', 'หญิง', 'เพศทางเลือก', 'ไม่ระบุ'];
   List<String> status = ['โสด(ตัวคนเดียว)', 'มีครอบครัว'];
   @override
   Widget build(BuildContext context) {
@@ -140,26 +152,8 @@ class _EditDataCustomerState extends State<EditDataCustomer> {
             key: formKey,
             child: Column(
               children: [
-                TextFormField(
-                  controller: dateController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                      labelText: 'วันเกิด',
-                      border: const UnderlineInputBorder(),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 12),
-                      suffixIcon: IconButton(
-                        onPressed: () =>
-                            selectDateFromPicker(context, dateController),
-                        icon: const Icon(Icons.calendar_today_outlined),
-                      )),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'กรุณากรอกวันเกิด';
-                    }
-                    return null;
-                  },
-                ),
+                widgetDropdown(dateController, age.join(','), dateController,
+                    'กรอกอายุ', 'กรุณากรอกอายุ'),
                 const SizedBox(height: 16),
                 widgetDropdown(careerController, job.join(','),
                     careerController, 'กรอกอาชีพ', 'กรุณากรอกอาชีพ'),
@@ -192,19 +186,21 @@ class _EditDataCustomerState extends State<EditDataCustomer> {
         border: const UnderlineInputBorder(),
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         labelText: label,
-        suffixIcon: DropdownButton<String>(
-          items: valuesList.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-              onTap: () {
-                setState(() {
-                  data.text = value;
-                });
-              },
-            );
-          }).toList(),
-          onChanged: (_) {},
+        suffixIcon: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            items: valuesList.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+                onTap: () {
+                  setState(() {
+                    data.text = value;
+                  });
+                },
+              );
+            }).toList(),
+            onChanged: (_) {},
+          ),
         ),
       ),
       validator: (value) {

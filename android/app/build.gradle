@@ -29,7 +29,13 @@ android {
     namespace "com.example.petkub2"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
-
+    androidResources {
+        noCompress 'tflite'
+    }
+    aaptOptions {
+        noCompress 'tflite'
+        noCompress 'lite'
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

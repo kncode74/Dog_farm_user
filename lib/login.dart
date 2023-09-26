@@ -1,8 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:petkub2/user_inputData.dart';
+import 'package:petkub2/user_input_data.dart';
 
 import 'bottom_navigator.dart';
 
@@ -14,74 +16,49 @@ class MyLogIn extends StatefulWidget {
 }
 
 class _MyLogInState extends State<MyLogIn> {
+  CollectionReference collectionRef =
+      FirebaseFirestore.instance.collection("customer");
   Future<void> signInWithGoogle() async {
     try {
-      // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      // Obtain the auth details from the request
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
 
-      // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
 
-      // Sign in with the credential
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      // Check if the sign-in was successful
       if (userCredential.user != null) {
-        // ignore: avoid_print
-        print(userCredential.user!.email);
-        // ignore: avoid_print, use_build_context_synchronously
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const InputDataForUser(),
-          ),
-        );
+        final docSnapshot =
+            await collectionRef.doc(userCredential.user!.email).get();
+
+        if (docSnapshot.exists) {
+          // Document already exists, navigate to MyNavigator directly
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MyNavigator(),
+            ),
+          );
+        } else {
+          // Document doesn't exist, navigate to InputDataForUser
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const InputDataForUser(),
+            ),
+          );
+        }
       }
     } catch (e) {
       // Handle sign-in errors here
       // ignore: avoid_print
       print('Error signing in: $e');
-    }
-  }
-
-  Future<void> checkUserData() async {
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      print(user.email);
-      final userDocRef =
-          FirebaseFirestore.instance.collection('customer').doc(user.uid);
-
-      // ดึงข้อมูลผู้ใช้ล่าสุดจาก Firestore
-      final userDataSnapshot = await userDocRef.get();
-      final userData = userDataSnapshot.data();
-
-      if (userData != null) {
-        // มีข้อมูลผู้ใช้ในเอกสาร
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MyNavigator()),
-        );
-      } else {
-        // ไม่มีข้อมูลผู้ใช้ในเอกสาร
-        // ignore: use_build_context_synchronously
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => InputDataForUser()),
-        );
-      }
-    } else {
-      // ไม่ได้เข้าสู่ระบบ
-      // ดำเนินการอื่น ๆ ตามที่คุณต้องการ
     }
   }
 
@@ -94,47 +71,57 @@ class _MyLogInState extends State<MyLogIn> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'images/logo.png',
-              height: 200,
+              'images/soonak Logo.png',
+              height: 180,
             ),
-            const Text(
-              'ยินดีต้อนรับสู่',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Text(
-              "Babykwan's Dog house",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-              onPressed: () => signInWithGoogle(),
-              child: const Text('Login with Google'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () => signInWithGoogle(),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(40),
+                        boxShadow: [
+                          BoxShadow(
+                              offset: const Offset(0, 3),
+                              blurRadius: 2,
+                              color: Colors.grey.shade400)
+                        ]),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Image.network(
+                          'https://kgo.googleusercontent.com/profile_vrt_raw_bytes_1587515358_10512.png',
+                          height: 45,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          'เข้าสู่ระบบด้วย Google',
+                          style: TextStyle(
+                              color: Color.fromRGBO(59, 89, 152, 1),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        const SizedBox(
+                          width: 25,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
-
-  /* Future handleGoogleSignIn() async {
-    final sp = context.read<SignInProvider>();
-    final ip = context.read<InternerProvider>();
-    await ip.checkInternetConnection();
-
-    if (ip.hasInternet == false) {
-      openSnackbar(context, 'Check your Internet connection', Colors.red);
-      googleController.reset();
-    } else {
-      await sp.signInWithGoogle().then((value) {
-        if (sp.hasError == true) {
-          openSnackbar(context, sp.errorCode.toString(), Colors.red);
-        } else {}
-      });
-    }
-  }*/
 }

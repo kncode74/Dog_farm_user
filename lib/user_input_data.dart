@@ -27,16 +27,33 @@ class _InputDataForUserState extends State<InputDataForUser> {
 
     if (currentUser != null && currentUser.email != null) {
       try {
-        if (formKey.currentState!.validate()) {
-          return await collectionRef.doc(currentUser.email).set({
-            'date_of_birth': dateController.text,
-            'career': careerController.text,
-            'income': incomeController.text,
-            'sex': sexController.text,
-            'status': statusController.text,
-            "Email": currentUser.email,
-            'image': currentUser.photoURL,
-          });
+        final docSnapshot = await collectionRef.doc(currentUser.email).get();
+
+        if (docSnapshot.exists) {
+          // Document already exists, navigate to MyNavigator directly
+          // ignore: use_build_context_synchronously
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MyNavigator()),
+          );
+        } else {
+          // Document doesn't exist, add user data
+          if (formKey.currentState!.validate()) {
+            await collectionRef.doc(currentUser.email).set({
+              'date_of_birth': dateController.text,
+              'career': careerController.text,
+              'income': incomeController.text,
+              'sex': sexController.text,
+              'status': statusController.text,
+              'Email': currentUser.email,
+              'image': currentUser.photoURL,
+            });
+
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => const MyNavigator()),
+            // );
+          }
         }
       } catch (error) {
         // ignore: avoid_print
@@ -45,7 +62,8 @@ class _InputDataForUserState extends State<InputDataForUser> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Please fill in all the required fields.')),
+          content: Text('Please fill in all the required fields.'),
+        ),
       );
     }
   }
@@ -61,21 +79,18 @@ class _InputDataForUserState extends State<InputDataForUser> {
     initializeFirebase();
   }
 
-  Future<void> selectDateFromPicker(BuildContext context, value) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(DateTime.now().year - 10),
-      firstDate: DateTime(DateTime.now().year - 30),
-      lastDate: DateTime(DateTime.now().year + 1),
-    );
-    if (picked != null) {
-      setState(() {
-        value.text = "${picked.day}/ ${picked.month}/ ${picked.year}";
-      });
-    }
-  }
-
   final formKey = GlobalKey<FormState>();
+  List<String> age = [
+    'ต่ำกว่า 18 ปี',
+    '18 - 20 ปี',
+    '21 - 25 ปี',
+    '26 - 30 ปี',
+    '31 - 35 ปี',
+    '36 - 40 ปี',
+    '40 - 45 ปี',
+    '46 - 50 ปี',
+    'มากกว่า 50 ปี '
+  ];
   List<String> job = [
     'อาชีพอิสระ',
     'อาชีพรับจ้าง',
@@ -83,6 +98,7 @@ class _InputDataForUserState extends State<InputDataForUser> {
     'พนักงานออฟฟิศ',
     'เจ้าของธุรกิจ/ค้าขาย',
     'Infurencer',
+    'นักเรียน/นักศึกษา'
   ];
   List<String> income = [
     'ตำ่กว่า 10 000 บาท',
@@ -90,25 +106,26 @@ class _InputDataForUserState extends State<InputDataForUser> {
     '20 000-30 000',
     'มากกว่า 30 000 บาท'
   ];
-  List<String> sex = ['ชาย', 'หญิง'];
+  List<String> sex = ['ชาย', 'หญิง', 'เพศทางเลือก', 'ไม่ระบุ'];
   List<String> status = ['โสด(ตัวคนเดียว)', 'มีครอบครัว'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Form(
-        key: formKey,
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Form(
+          key: formKey,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'images/logo.png',
-                      height: 150,
+                      'images/soonak Logo.png',
+                      height: 120,
                     ),
                   ],
                 ),
@@ -116,7 +133,7 @@ class _InputDataForUserState extends State<InputDataForUser> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'ลงทะเบียนเจ้าของฟาร์ม',
+                      'ลงทะเบียนเพื่อดูข้อมูลสุนัข',
                       style: TextStyle(fontSize: 23),
                     )
                   ],
@@ -125,34 +142,16 @@ class _InputDataForUserState extends State<InputDataForUser> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'กรอกข้อมูลสำหรับฟาร์มสุนัข',
+                      'กรอกข้อมูลส่วนตัว',
                       style: TextStyle(fontSize: 16),
                     )
                   ],
                 ),
                 const SizedBox(
-                  height: 35,
+                  height: 20,
                 ),
-                TextFormField(
-                  controller: dateController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                      labelText: 'วันเกิด',
-                      border: const OutlineInputBorder(),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 12),
-                      suffixIcon: IconButton(
-                        onPressed: () =>
-                            selectDateFromPicker(context, dateController),
-                        icon: const Icon(Icons.calendar_today_outlined),
-                      )),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'กรุณากรอกวันเกิด';
-                    }
-                    return null;
-                  },
-                ),
+                widgetDropdown(dateController, age.join(','), dateController,
+                    'กรอกอายุ', 'กรุณากรอกอายุ'),
                 const SizedBox(height: 16),
                 widgetDropdown(careerController, job.join(','),
                     careerController, 'กรอกอาชีพ', 'กรุณากรอกอาชีพ'),
@@ -165,16 +164,31 @@ class _InputDataForUserState extends State<InputDataForUser> {
                 const SizedBox(height: 16),
                 widgetDropdown(statusController, status.join(','),
                     statusController, 'กรอกสถานะ', 'กรุณากรอกสถานะ'),
-                ElevatedButton(
-                  onPressed: () {
-                    sendUserDataToDB();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MyNavigator()));
-                  },
-                  child: const Text('Continue'),
+                const SizedBox(
+                  height: 20,
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromRGBO(20, 39, 122, 1),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        onPressed: () => sendUserDataToDB(),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '  บันทึกข้อมูล  ',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            )
+                          ],
+                        )),
+                  ],
+                )
               ],
             ),
           ),
@@ -192,22 +206,23 @@ class _InputDataForUserState extends State<InputDataForUser> {
       controller: controller,
       readOnly: true,
       decoration: InputDecoration(
-        border: const OutlineInputBorder(),
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         labelText: label,
-        suffixIcon: DropdownButton<String>(
-          items: valuesList.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-              onTap: () {
-                setState(() {
-                  data.text = value;
-                });
-              },
-            );
-          }).toList(),
-          onChanged: (_) {},
+        suffixIcon: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            items: valuesList.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+                onTap: () {
+                  setState(() {
+                    data.text = value;
+                  });
+                },
+              );
+            }).toList(),
+            onChanged: (_) {},
+          ),
         ),
       ),
       validator: (value) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:petkub2/All%20data%20dog/pedigree.dart';
 import 'package:petkub2/All%20data%20dog/photo_ofdog.dart';
 import 'package:petkub2/All%20data%20dog/vaccine_dog.dart';
+import 'package:petkub2/bottom_navigator.dart';
 
 import 'dataofdog.dart';
 
@@ -22,6 +23,7 @@ class _MyProfileDogState extends State<MyProfileDog> {
   bool isFavorite = false;
   CollectionReference favoriteCollection =
       FirebaseFirestore.instance.collection('customer');
+  QuerySnapshot? allDogsSnapshot;
 
   @override
   void initState() {
@@ -29,6 +31,11 @@ class _MyProfileDogState extends State<MyProfileDog> {
     checkFavorite();
     super.initState();
     documentStream = widget.dog.snapshots();
+    FirebaseFirestore.instance.collection('dog').get().then((snapshot) {
+      setState(() {
+        allDogsSnapshot = snapshot;
+      });
+    });
   }
 
   Future<void> checkFavorite() async {
@@ -135,14 +142,49 @@ class _MyProfileDogState extends State<MyProfileDog> {
           final status = document['Status_sell'] ?? '';
           bool isSoldOut = status == 'มีบ้านแล้ว';
           final imageprofile = document['profileImage'] ?? '';
+          final List<DocumentSnapshot> similarDogs = [];
 
+          final String speciesToMatch = currentDocument!['species'];
+          final String colorToMatch = currentDocument!['color'];
+
+          for (var dog in allDogsSnapshot?.docs ?? []) {
+            final species = dog['species'];
+            final color = dog['color'];
+
+            if (species == speciesToMatch && color == colorToMatch) {
+              similarDogs.add(dog);
+            }
+          }
           return DefaultTabController(
             length: 4,
             child: Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
-                  title: Text(idDog),
-                  backgroundColor: const Color.fromRGBO(159, 203, 114, 1),
+                  centerTitle: true,
+                  iconTheme: const IconThemeData(color: Colors.black),
+                  title: Text(
+                    'ID : $idDog',
+                    style:
+                        const TextStyle(color: Color.fromRGBO(57, 57, 57, 1)),
+                  ),
+                  backgroundColor: Colors.white,
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyNavigator()));
+                        },
+                        child: const Icon(
+                          Icons.home,
+                          size: 35,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
                 body: Stack(
                   children: [
@@ -234,6 +276,73 @@ class _MyProfileDogState extends State<MyProfileDog> {
                               ),
                             ],
                           ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            const Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'แนะนำสำหรับคุณ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [Text('กดเพื่อดู')],
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: similarDogs.map((dog) {
+                                    final imageUrl = dog['profileImage'];
+                                    if (dog.id == currentDocument!.id) {
+                                      return const SizedBox(); // Skip rendering this dog
+                                    }
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 15),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MyProfileDog(
+                                                          dog: dog.reference)));
+                                        },
+                                        child: CircleAvatar(
+                                          radius: 27,
+                                          backgroundColor: Colors.grey,
+                                          child: CircleAvatar(
+                                            radius: 25,
+                                            backgroundImage: imageUrl.isNotEmpty
+                                                ? Image.network(imageUrl).image
+                                                : const AssetImage(
+                                                    "images/logo.png"),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                         const TabBar(
                           indicatorColor: Color.fromRGBO(159, 203, 114, 1),

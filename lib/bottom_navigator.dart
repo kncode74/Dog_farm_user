@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petkub2/contol/gridview_dog.dart';
+import 'package:petkub2/contol/select_detect.dart';
 
-import 'contol/detection.dart';
 import 'contol/phofile_of_user.dart';
 
 class MyNavigator extends StatefulWidget {
@@ -13,7 +13,7 @@ class MyNavigator extends StatefulWidget {
 
 class _MyNavigatorState extends State<MyNavigator> {
   final List<Widget> _tapList = [
-    const MyDetection(),
+    const SelectDetection(),
     const MyDataOdDog(),
     const MyProfileUsers(),
   ];
@@ -27,6 +27,7 @@ class _MyNavigatorState extends State<MyNavigator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(246, 246, 246, 1),
       body: Stack(
         children: [
           _tapList.elementAt(_selectIndex),

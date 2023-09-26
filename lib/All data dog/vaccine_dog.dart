@@ -56,17 +56,9 @@ class _VacCineState extends State<VacCine> {
         final vaccinetype1 = document['vaccinetype1'] ?? '';
         final vaccinetype2 = document['vaccinetype2'] ?? '';
         final vaccinedate1 = document['vaccinedate1'] ?? '';
-        final vaccinedate2 = document['vaccinedate1'] ?? '';
+        final vaccinedate2 = document['vaccinedate2'] ?? '';
         final imageVac = document['vaccineImage'] ?? '';
         //หากยังไม่มีข้อมูลส่วนนี้จะแสดง
-        if (vaccinetype1.isEmpty &&
-            vaccinedate2.isEmpty &&
-            vaccinedate1.isEmpty &&
-            vaccinetype2.isEmpty) {
-          return const Text(
-            'ยังไม่มีข้อมูล',
-          );
-        }
 
         return Scaffold(
             backgroundColor: const Color.fromRGBO(248, 247, 247, 1),
@@ -133,10 +125,13 @@ class _VacCineState extends State<VacCine> {
                                                 },
                                                 errorBuilder: (context, error,
                                                     stackTrace) {
-                                                  return const Icon(
-                                                    Icons
-                                                        .add_photo_alternate_outlined,
-                                                    size: 50,
+                                                  return const Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text('ยังไม่มีข้อมูล'),
+                                                    ],
                                                   );
                                                 },
                                                 fit: BoxFit
@@ -209,9 +204,15 @@ class _VacCineState extends State<VacCine> {
                                               Column(
                                                 children: [
                                                   Text(
-                                                    vaccinedate1,
-                                                    style: const TextStyle(
-                                                      fontSize: 15,
+                                                    vaccinedate1.isEmpty
+                                                        ? 'ยังไม่มีข้อมูล'
+                                                        : vaccinetype2,
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      color:
+                                                          vaccinedate1.isEmpty
+                                                              ? Colors.red
+                                                              : Colors.black,
                                                     ),
                                                   )
                                                 ],
@@ -239,9 +240,15 @@ class _VacCineState extends State<VacCine> {
                                               Column(
                                                 children: [
                                                   Text(
-                                                    vaccinetype1,
-                                                    style: const TextStyle(
-                                                      fontSize: 15,
+                                                    vaccinetype1.isEmpty
+                                                        ? 'ยังไม่มีข้อมูล'
+                                                        : vaccinetype2,
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      color:
+                                                          vaccinetype1.isEmpty
+                                                              ? Colors.red
+                                                              : Colors.black,
                                                     ),
                                                   )
                                                 ],

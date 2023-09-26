@@ -80,9 +80,9 @@ class _PediGreeState extends State<PediGree> {
 
           final imagePed = document['pedigreeImage'] ?? '';
 
-          if (dad.isEmpty && mom.isEmpty) {
-            return const Text('ยังไม่มีข้อมูล');
-          }
+          // if (dad.isEmpty && mom.isEmpty) {
+          //   return const Text('ยังไม่มีข้อมูล');
+          // }
 
           return Scaffold(
             backgroundColor: const Color.fromRGBO(248, 247, 247, 1),
@@ -151,10 +151,13 @@ class _PediGreeState extends State<PediGree> {
                                                 },
                                                 errorBuilder: (context, error,
                                                     stackTrace) {
-                                                  return const Icon(
-                                                    Icons
-                                                        .add_photo_alternate_outlined,
-                                                    size: 50,
+                                                  return const Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text('ยังไม่มีข้อมูล'),
+                                                    ],
                                                   );
                                                 },
                                                 fit: BoxFit
@@ -196,7 +199,13 @@ class _PediGreeState extends State<PediGree> {
                             'พ่อพันธุ์',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text(dad),
+                          subtitle: Text(
+                            dad.isEmpty ? 'ยังไม่มีข้อมูล' : dad,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: dad.isEmpty ? Colors.red : Colors.black,
+                            ),
+                          ),
                           onTap: () {
                             String idDog = dad;
                             DocumentReference documentReference =
@@ -247,7 +256,13 @@ class _PediGreeState extends State<PediGree> {
                             'แม่พันธุ์',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text(mom),
+                          subtitle: Text(
+                            mom.isEmpty ? 'ยังไม่มีข้อมูล' : mom,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: mom.isEmpty ? Colors.red : Colors.black,
+                            ),
+                          ),
                           onTap: () {
                             String idDog = mom;
                             DocumentReference documentReference =

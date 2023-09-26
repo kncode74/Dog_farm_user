@@ -90,7 +90,7 @@ class _DataOfDogState extends State<DataOfDog> {
         final date = document['date_of_birth'] ?? '';
         final weight = document['weight'] ?? '';
         final height = document['height'] ?? '';
-
+        final etc = document['etc'] ?? '';
         final color = document['color'] ?? '';
 
         final age = calculateAge(date);
@@ -104,6 +104,64 @@ class _DataOfDogState extends State<DataOfDog> {
                   padding: const EdgeInsets.only(left: 18, right: 18),
                   child: Column(
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.all(13),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            //PROFILE NAME
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'คำอธิบายเพิ่มเติม',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 15, right: 15),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                etc.isEmpty ? '--' : etc,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: etc.isEmpty
+                                                        ? Colors.red
+                                                        : Colors.black),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(13),
                         child: Row(
