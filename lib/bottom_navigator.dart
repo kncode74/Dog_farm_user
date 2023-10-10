@@ -51,6 +51,9 @@ class _MyNavigatorState extends State<MyNavigator> {
                       icon: Image.asset(
                         'images/6927609.png',
                         height: 36,
+                        color: _selectIndex == 0
+                            ? const Color.fromRGBO(64, 148, 58, 1)
+                            : null,
                       ),
                       label: '',
                     ),
@@ -58,6 +61,9 @@ class _MyNavigatorState extends State<MyNavigator> {
                       icon: Image.asset(
                         'images/pawprint.png',
                         height: 32,
+                        color: _selectIndex == 1
+                            ? const Color.fromRGBO(64, 148, 58, 1)
+                            : null,
                       ),
                       label: '',
                     ),
@@ -65,6 +71,9 @@ class _MyNavigatorState extends State<MyNavigator> {
                       icon: Image.asset(
                         'images/menu.png',
                         height: 35,
+                        color: _selectIndex == 2
+                            ? const Color.fromRGBO(64, 148, 58, 1)
+                            : null, // เช็ค index เพื่อกำหนดสี
                       ),
                       label: '',
                     ),

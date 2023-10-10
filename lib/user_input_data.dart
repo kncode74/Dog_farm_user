@@ -48,11 +48,6 @@ class _InputDataForUserState extends State<InputDataForUser> {
               'Email': currentUser.email,
               'image': currentUser.photoURL,
             });
-
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const MyNavigator()),
-            // );
           }
         }
       } catch (error) {

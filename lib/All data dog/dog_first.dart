@@ -39,8 +39,6 @@ class _MyProfileDogState extends State<MyProfileDog> {
   }
 
   Future<void> checkFavorite() async {
-    // ignore: avoid_print
-    print('check');
     final FirebaseAuth auth = FirebaseAuth.instance;
     var currentUser = auth.currentUser;
     CollectionReference favoriteCollection =
