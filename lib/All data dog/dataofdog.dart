@@ -81,12 +81,8 @@ class _DataOfDogState extends State<DataOfDog> {
         final document = snapshot.data!;
         currentDocument = document;
         final status = document['status'] ?? '';
-        final idDog = document['id_dog'] ?? '';
         final species = document['species'] ?? '';
         final sex = document['sex'] ?? '';
-        final price = document['price'] ?? '';
-        final statussell = document['Status_sell'] ?? '';
-        //final imageprofile = document['profileImage'] ?? '';
         final date = document['date_of_birth'] ?? '';
         final weight = document['weight'] ?? '';
         final height = document['height'] ?? '';
@@ -184,7 +180,7 @@ class _DataOfDogState extends State<DataOfDog> {
                                           Column(
                                             children: [
                                               Text(
-                                                'ข้อมูลการขาย',
+                                                'ข้อมูลส่วนตัว',
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -199,57 +195,8 @@ class _DataOfDogState extends State<DataOfDog> {
                                         child: Column(
                                           children: [
                                             dataprivate('สถานะ', status),
-                                            dataprivate('รหัสประจำตัว', idDog),
                                             dataprivate('พันธุ์', species),
                                             dataprivate('เพศ', sex),
-                                            dataprivate('ราคา', price),
-                                            dataprivate('การขาย', statussell)
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(13.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      const Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            children: [
-                                              Text(
-                                                'ข้อมูลส่วนตัว',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15, right: 15, top: 5),
-                                        child: Column(
-                                          children: [
                                             dataprivate('วันเกิด', date),
                                             dataprivate(
                                                 'ปัจจุบันอายุ', ageString),

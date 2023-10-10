@@ -283,7 +283,7 @@ class _MyDataOdDogState extends State<MyDataOdDog> {
                                   EasyDebounce.debounce(
                                     'searchDebounce', // debounce identifier
                                     const Duration(
-                                        milliseconds: 500), // debounce duration
+                                        milliseconds: 800), // debounce duration
                                     () => debouncedSearch(
                                         val), // function to be executed
                                   );
@@ -487,7 +487,7 @@ class _MyDataOdDogState extends State<MyDataOdDog> {
                                             children: [
                                               Text(
                                                 '$status : $idDog',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontSize: 14,
                                                     fontWeight:
                                                         FontWeight.bold),

@@ -114,7 +114,7 @@ class _MyProfileUsersState extends State<MyProfileUsers> {
                     children: [
                       Text(
                         currrenUser.displayName.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 17),
                       ),
                     ],

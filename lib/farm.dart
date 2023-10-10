@@ -39,9 +39,6 @@ class Farm extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 10, bottom: 20),
                     child: Column(
                       children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -71,6 +68,9 @@ class Farm extends StatelessWidget {
                               ),
                             )
                           ],
+                        ),
+                        const SizedBox(
+                          height: 15,
                         ),
                         const Row(
                           children: [

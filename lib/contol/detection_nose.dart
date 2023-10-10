@@ -200,7 +200,26 @@ class _DetectionNoseState extends State<DetectionNose> {
                                 ),
                               ),
                             )
-                          : const SizedBox.shrink()
+                          : Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/detect.png',
+                                    height: 70,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  const Text(
+                                    'ค้นหาสุนัข',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            )
                     ],
                   ),
                 ),

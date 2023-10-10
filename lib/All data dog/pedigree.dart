@@ -208,28 +208,32 @@ class _PediGreeState extends State<PediGree> {
                           ),
                           onTap: () {
                             String idDog = dad;
-                            DocumentReference documentReference =
-                                FirebaseFirestore.instance
-                                    .collection('dog')
-                                    .doc(idDog);
-                            documentReference
-                                .get()
-                                .then((DocumentSnapshot documentSnapshot) {
-                              if (documentSnapshot.exists) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        MyProfileDog(dog: documentReference),
-                                  ),
-                                );
-                              } else {
-                                showNotFoundDialog(context);
-                              }
-                            }).catchError((error) {
-                              // ignore: avoid_print
-                              print("Error getting document: $error");
-                            });
+                            if (dad.isNotEmpty) {
+                              DocumentReference documentReference =
+                                  FirebaseFirestore.instance
+                                      .collection('dog')
+                                      .doc(idDog);
+                              documentReference
+                                  .get()
+                                  .then((DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MyProfileDog(
+                                        dog: documentReference,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  showNotFoundDialog(context);
+                                }
+                              }).catchError((error) {
+                                // Handle errors here
+                                // ignore: avoid_print
+                                print("Error getting document: $error");
+                              });
+                            }
                           },
                         ),
                       ),
@@ -265,28 +269,32 @@ class _PediGreeState extends State<PediGree> {
                           ),
                           onTap: () {
                             String idDog = mom;
-                            DocumentReference documentReference =
-                                FirebaseFirestore.instance
-                                    .collection('dog')
-                                    .doc(idDog);
-                            documentReference
-                                .get()
-                                .then((DocumentSnapshot documentSnapshot) {
-                              if (documentSnapshot.exists) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        MyProfileDog(dog: documentReference),
-                                  ),
-                                );
-                              } else {
-                                showNotFoundDialog(context);
-                              }
-                            }).catchError((error) {
-                              // ignore: avoid_print
-                              print("Error getting document: $error");
-                            });
+                            if (mom.isNotEmpty) {
+                              DocumentReference documentReference =
+                                  FirebaseFirestore.instance
+                                      .collection('dog')
+                                      .doc(idDog);
+                              documentReference
+                                  .get()
+                                  .then((DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MyProfileDog(
+                                        dog: documentReference,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  showNotFoundDialog(context);
+                                }
+                              }).catchError((error) {
+                                // Handle errors here
+                                // ignore: avoid_print
+                                print("Error getting document: $error");
+                              });
+                            }
                           },
                         ),
                       ),
