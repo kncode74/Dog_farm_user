@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:petkub2/All%20data%20dog/dog_first.dart';
+import 'package:photo_view/photo_view.dart';
 
 class PediGree extends StatefulWidget {
   final DocumentReference documentReference;
@@ -24,12 +25,19 @@ class _PediGreeState extends State<PediGree> {
   void showImage(BuildContext context, String imageUrl) {
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.network(imageUrl),
-          ],
+      builder: (context) => Dialog.fullscreen(
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+          ),
+          body: PhotoView(
+            imageProvider: NetworkImage(imageUrl),
+            backgroundDecoration: const BoxDecoration(
+              color: Colors.black,
+            ),
+            minScale: PhotoViewComputedScale.contained,
+            maxScale: PhotoViewComputedScale.covered * 2,
+          ),
         ),
       ),
     );

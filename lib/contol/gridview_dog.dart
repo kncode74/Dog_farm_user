@@ -218,6 +218,47 @@ class _MyDataOdDogState extends State<MyDataOdDog> {
                 idMom.contains(momsearchQuery) &&
                 dogStatus.contains(search));
           }).toList();
+          final totalDogsCount = dogs.length;
+          int fatherCount = 0;
+          int motherCount = 0;
+          int babyCount = 0;
+          int maleCount = 0;
+          int femaleCount = 0;
+          int sellCount = 0;
+          int soldCount = 0;
+          int pomCount = 0;
+          int yokCount = 0;
+          int blueCount = 0;
+
+          //  เงื่อนไขในการนับจำนวนสุนัข
+          if (selectedStatus == DogStatus.father) {
+            fatherCount =
+                dogs.where((doc) => doc['status'] == 'พ่อพันธุ์').length;
+          } else if (selectedStatus == DogStatus.mother) {
+            motherCount =
+                dogs.where((doc) => doc['status'] == 'แม่พันธุ์').length;
+          } else if (selectedStatus == DogStatus.son) {
+            babyCount = dogs.where((doc) => doc['status'] == 'อื่นๆ').length;
+          } else if (selectedStatus == DogStatus.male) {
+            maleCount = dogs.where((doc) => doc['sex'] == 'เพศผู้').length;
+          } else if (selectedStatus == DogStatus.female) {
+            femaleCount = dogs.where((doc) => doc['sex'] == 'เพศเมีย').length;
+          } else if (selectedStatus == DogStatus.sell) {
+            sellCount =
+                dogs.where((doc) => doc['Status_sell'] == 'กำลังหาบ้าน').length;
+          } else if (selectedStatus == DogStatus.sold) {
+            soldCount =
+                dogs.where((doc) => doc['Status_sell'] == 'มีบ้านแล้ว').length;
+          } else if (selectedStatus == DogStatus.pom) {
+            pomCount =
+                dogs.where((doc) => doc['species'] == 'ปอมเมอเรเนียน').length;
+          } else if (selectedStatus == DogStatus.yok) {
+            yokCount = dogs
+                .where((doc) => doc['species'] == 'ยอร์คเชียร์เทอร์เรีย')
+                .length;
+          } else if (selectedStatus == DogStatus.bloo) {
+            blueCount = dogs.where((doc) => doc['species'] == 'บลูด็อก').length;
+          }
 
           return Column(
             children: [
@@ -410,6 +451,33 @@ class _MyDataOdDogState extends State<MyDataOdDog> {
                 ),
               ),
               //
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  if (selectedStatus == DogStatus.all)
+                    textCount('ทั้งหมด : $totalDogsCount  ตัว'),
+                  if (selectedStatus == DogStatus.father)
+                    textCount('พ่อพันธุ์: $fatherCount  ตัว'),
+                  if (selectedStatus == DogStatus.mother)
+                    textCount('แม่พันธุ์: $motherCount  ตัว'),
+                  if (selectedStatus == DogStatus.son)
+                    textCount('ลูก: $babyCount  ตัว'),
+                  if (selectedStatus == DogStatus.sold)
+                    textCount('สนุัขที่ขายแล้ว: $soldCount  ตัว'),
+                  if (selectedStatus == DogStatus.sell)
+                    textCount('สุนัขที่หาบ้าน: $sellCount  ตัว'),
+                  if (selectedStatus == DogStatus.male)
+                    textCount('เพศผู้: $maleCount  ตัว'),
+                  if (selectedStatus == DogStatus.female)
+                    textCount('เพศเมีย: $femaleCount  ตัว'),
+                  if (selectedStatus == DogStatus.pom)
+                    textCount('พันธุ์ปอมเมอเรีเนียน: $pomCount  ตัว'),
+                  if (selectedStatus == DogStatus.yok)
+                    textCount('พันธุ์ยอร์คทิเซีย: $yokCount  ตัว'),
+                  if (selectedStatus == DogStatus.bloo)
+                    textCount('พันธุ์บลูด็อก: $blueCount  ตัว'),
+                ],
+              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(15),
@@ -465,11 +533,11 @@ class _MyDataOdDogState extends State<MyDataOdDog> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     CircleAvatar(
-                                      radius: 57,
+                                      radius: 45,
                                       backgroundColor: const Color.fromRGBO(
                                           159, 203, 114, 1),
                                       child: CircleAvatar(
-                                        radius: 54,
+                                        radius: 43,
                                         backgroundImage:
                                             NetworkImage(imageprofile),
                                       ),
@@ -499,7 +567,7 @@ class _MyDataOdDogState extends State<MyDataOdDog> {
                                               Text(
                                                 '$species | $sex',
                                                 style: const TextStyle(
-                                                    fontSize: 14),
+                                                    fontSize: 12),
                                               )
                                             ],
                                           ),
@@ -539,6 +607,13 @@ class _MyDataOdDogState extends State<MyDataOdDog> {
     );
   }
 
+  Widget textCount(String title) => Padding(
+        padding: const EdgeInsets.only(left: 25, top: 5, bottom: 5),
+        child: Text(
+          title,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      );
   Widget buildStatusButton(DogStatus status, String label, Color color) {
     return TextButton(
       onPressed: () {
